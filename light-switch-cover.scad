@@ -2,11 +2,12 @@ holeDia = 6.15;
 baseThickness = 3.8;
 wellDepth = baseThickness/2;
 servoStrutDia = 4.28;
-servoStrutHeightOffset = 10;
-servoStrutHeight = 18;
-bottomStrutOffset = 27.5;
+servoStrutHeightOffset = 22;
+servoStrutHeight = 30;
+bottomStrutOffset = 32.5;
 inlineServoStrutSep = 10.21;
 servoWidth = 20.4;
+servoStrutsX = 5;
 $fn = 80;
 
 module base(){
@@ -29,10 +30,10 @@ module servoStrut(){
 }
 
 module servoStruts(){
-    translate([servoWidth+2,-bottomStrutOffset,0])servoStrut();
-    translate([servoWidth+2-inlineServoStrutSep,-bottomStrutOffset,0])servoStrut();
-    translate([servoWidth+2,-bottomStrutOffset+43.68+servoStrutDia,0])servoStrut();   
-    translate([servoWidth+2-inlineServoStrutSep,-bottomStrutOffset+43.68+servoStrutDia,0])servoStrut();  
+    translate([servoWidth+servoStrutsX,-bottomStrutOffset,0])servoStrut();
+    translate([servoWidth+servoStrutsX-inlineServoStrutSep,-bottomStrutOffset,0])servoStrut();
+    translate([servoWidth+servoStrutsX,-bottomStrutOffset+43.68+servoStrutDia,0])servoStrut();   
+    translate([servoWidth+servoStrutsX-inlineServoStrutSep,-bottomStrutOffset+43.68+servoStrutDia,0])servoStrut();  
 }
 
 module drawAll(){

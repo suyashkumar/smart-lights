@@ -23,7 +23,7 @@ HomeAuto homeAuto("suyash", "home.suyash.io"); // or "suyash", "home.suyash.io"
 int ledStatus = 0;
 int currentAngle = 0;
 int lightsOnAngle = 65;
-int lightsOffAngle = 30;
+int lightsOffAngle = 25;
 
 void startWIFI(){
   WiFi.begin(ssid, password);
@@ -94,7 +94,7 @@ void setup(void){
   pinMode(servo_power, OUTPUT); 
   
   digitalWrite(servo_power, HIGH);
-  delay(10);
+  delay(500);
   servo1.attach(servo); 
   servo1.write(lightsOnAngle);
   digitalWrite(servo_power, LOW);

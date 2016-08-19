@@ -14,7 +14,7 @@ axios.interceptors.request.use(function(config) {
 axios.interceptors.response.use(function(response) {
 	console.log(response);
 	if(response.config.auth_me && response.status === 401) {
-		if(!response.data.success) window.location.href = "/login"; 
+		if(!response.data.success) window.location.href = "#/login"; 
 	} 
 	return response;
 });

@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import axios from '../axios-auth'; 
 import classNames from 'classnames';
 
-const server = 'http://10.0.0.98:9000';
+//const server = 'http://10.0.0.98:9000';
+const server = 'http://home.suyash.io';
 const FunctionButton = props => { 
 	const callFunction = () => { 
 		return axios.get(`${server}/send/${props.deviceName}/${props.functionName}`, {auth_me: true}).then(response => {console.log(response)}); 

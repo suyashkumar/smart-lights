@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import axios from './axios-auth';
 
-const server = 'http://10.0.0.98:9000' 
+//const server = 'http://10.0.0.98:9000' 
+const server = 'http://home.suyash.io'; 
 
 class login extends Component{
 	constructor(props) {

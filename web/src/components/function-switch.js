@@ -5,9 +5,9 @@ class FunctionSwitch extends Component {
 	render() {
 		// Display only the button switch layout for now: 
 		return (
-			<div className="well">
+			<div className="well" style={{width: '90%', margin: 'auto'}}>
 				<div className="text-center row" style={{marginBottom: '20px'}}>
-					<h5> {this.props.title} </h5>
+					<h5> {this.props.title} | Current Status: ON </h5>
 				</div>
 				<div className="text-center spaced row"> 
 					<FunctionButton

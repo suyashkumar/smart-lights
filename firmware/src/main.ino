@@ -20,8 +20,8 @@ WiFiClient client;
 PubSubClient pClient(client);
 //HomeAuto homeAuto("suyash", "10.0.0.98"); // or "suyash", "home.suyash.io"
 HomeAuto homeAuto("suyash", "home.suyash.io"); // or "suyash", "home.suyash.io"
-int ledStatus = 0;
-int currentAngle = 0;
+int ledStatus = 0; 
+int lightsStatus = 0;
 int lightsOnAngle = 65;
 int lightsOffAngle = 25;
 
@@ -53,7 +53,7 @@ int ledToggle(){
 int publishMessage(){
     homeAuto.publishMessage("hey there");
 }
-
+/*
 int addTen(){
 	currentAngle = currentAngle + 10;
 	servo1.write(currentAngle);
@@ -70,13 +70,14 @@ int subtractTen(){
 	const char* angleStrPublish = angleStr;
 	homeAuto.publishMessage(angleStrPublish); 
 }
-
+*/
 int lightsOn(){
 	digitalWrite(servo_power, HIGH);
 	servo1.write(lightsOnAngle);
 	delay(700);
 	homeAuto.publishMessage("ON");
 	digitalWrite(servo_power, LOW);
+	lightsStatus = 1;
 }
 
 int lightsOff(){
@@ -85,6 +86,11 @@ int lightsOff(){
 	delay(700);
 	homeAuto.publishMessage("OFF");
 	digitalWrite(servo_power, LOW);
+	lightsStatus = 0;
+}
+
+int lightsStatusFunc(){
+	homeAuto.publishMessage((lightsStatus) ? "ON" : "OFF"); 
 }
 
 void setup(void){
@@ -93,22 +99,20 @@ void setup(void){
   pinMode(servo, OUTPUT); // Set up servo output
   pinMode(servo_power, OUTPUT); 
   
-  digitalWrite(servo_power, HIGH);
-  delay(500);
+  startWIFI(); // Config/start wifi
+  
+  digitalWrite(servo_power, HIGH); 
   servo1.attach(servo); 
   servo1.write(lightsOnAngle);
-  digitalWrite(servo_power, LOW);
-
-
-  startWIFI(); // Config/start wifi
+  delay(500);
+  digitalWrite(servo_power, LOW); 
 
   // HomeAuto bindings
   homeAuto.addHandler("ledToggle", &ledToggle);
-  homeAuto.addHandler("hello", &publishMessage);
-  homeAuto.addHandler("addTen", &addTen); 
-  homeAuto.addHandler("subtractTen", &subtractTen);
+  homeAuto.addHandler("hello", &publishMessage); 
   homeAuto.addHandler("lightsOn", &lightsOn);
   homeAuto.addHandler("lightsOff", &lightsOff);
+  homeAuto.addHandler("lightsStatus", &lightsStatusFunc);
   homeAuto.setClient(pClient);
 
 }

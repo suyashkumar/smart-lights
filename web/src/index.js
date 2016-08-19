@@ -8,7 +8,7 @@ import Home from './home';
 
 ReactDOM.render(
   (
-  	<Router history={browserHistory}>
+  	<Router>
 		<Route path="/" component={App}>
 			<IndexRoute component={Home}/>	
 			<Route path="login" component={login} /> 

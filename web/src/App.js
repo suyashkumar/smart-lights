@@ -11,7 +11,9 @@ class App extends Component {
 				<h4> Suyash's Lights </h4>	
 			</div>
 		</div>
+		<div>
 		{this.props.children}
+		</div>
 		<div className="text-center row">
 			<Footer />
 		</div> 

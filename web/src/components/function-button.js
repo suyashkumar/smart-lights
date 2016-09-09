@@ -6,7 +6,12 @@ import classNames from 'classnames';
 const server = 'http://home.suyash.io';
 const FunctionButton = props => { 
 	const callFunction = () => { 
-		return axios.get(`${server}/send/${props.deviceName}/${props.functionName}`, {auth_me: true}).then(response => {console.log(response)}); 
+		axios.get(`${server}/api/send/${props.deviceName}/${props.functionName}`, {auth_me: true}).then(
+			response => {
+				console.log(response);
+				if (response.data.success) props.changeStatus(response.data.data);	
+			}
+		); 
 	};
 
 	const buttonClass = classNames({

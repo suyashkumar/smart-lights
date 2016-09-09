@@ -17,11 +17,10 @@ class login extends Component{
 	}
 
 	handleLogin() {
-		axios.post(`${server}/auth`, {
+		axios.post(`${server}/api/auth`, {
 			email: this.state.email,
 			password: this.state.password
 		}).then(response => { 
-				console.log(response);
 				if(response.data.success) {
 					localStorage.setItem('jwtToken', response.data.token); 
 					this.props.history.push('/');
@@ -34,16 +33,29 @@ class login extends Component{
 	}
 
 	handlePasswordChange(e) {
-		this.setState({password: e.target.value});
-		console.log(e.target.value);
+		this.setState({password: e.target.value}); 
 	} 
 
 	render(){
 		return (
 			<div className="text-center">
-				<div> <input type="text" onChange={this.handleEmailChange} value={this.state.email}/> </div>
-				<div> <input type="password" onChange={this.handlePasswordChange} value={this.state.password}/> </div>
-				<button className="btn btn-success" onClick={this.handleLogin}> Submit </button>
+				<div style={{paddingBottom: '10px'}}> 
+					<input 
+						type="text" 
+						onChange={this.handleEmailChange} 
+						value={this.state.email}/> 
+				</div>
+				<div style={{paddingBottom: '10px'}}> 
+					<input 
+						type="password" 
+						onChange={this.handlePasswordChange} 
+						value={this.state.password}/> 
+				</div>
+				<button 
+					className="btn btn-success" 
+					onClick={this.handleLogin}> 
+				Submit 
+				</button>
 			</div> 
 		);
 	}

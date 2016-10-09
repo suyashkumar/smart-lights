@@ -11,7 +11,9 @@ const FunctionButton = props => {
 				console.log(response);
 				if (response.data.success) props.changeStatus(response.data.data);	
 			}
-		); 
+		).catch((e) => {
+			console.log(e);	
+		}); 
 	};
 
 	const buttonClass = classNames({

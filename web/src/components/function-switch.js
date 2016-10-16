@@ -11,12 +11,16 @@ class FunctionSwitch extends Component {
 		}
 		this.refreshStatus = this.refreshStatus.bind(this);
 		this.changeStatus = this.changeStatus.bind(this);
-		this.refreshStatus();
+		this.refreshStatus(1);
 	}
 
-	refreshStatus() {
+	refreshStatus(numRetries) {
 		axios.get(`${server}/api/send/${this.props.deviceName}/${this.props.statusFunction}`, {auth_me: true}).then(response => {
 			if(response.data.success) this.setState({currentStatus: response.data.data});
+			else {
+				if (numRetries) this.refreshStatus(numRetries-1);
+				else this.setState({currentStatus: "ERR"});
+			}
 		});
 	}
 
@@ -26,7 +30,7 @@ class FunctionSwitch extends Component {
 
 	renderStatus() {
 		return (
-			<div>Current Status: <span className="label label-primary">{this.state.currentStatus}</span> </div>
+			<div onClick={this.refreshStatus} style={{cursor: 'pointer'}}>Current Status: <span className="label label-primary">{this.state.currentStatus}</span> </div>
 		)
 	}
 

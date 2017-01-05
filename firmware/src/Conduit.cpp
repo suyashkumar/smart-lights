@@ -1,5 +1,5 @@
 /*
-HomeAuto.cpp
+Conduit.cpp
 A library that handles ESP8266 communication with a server (even on private
 networks). Consumers of this library can simply write functions and have them
 be fired whenver the server fires a given event directed at this device. There is
@@ -10,7 +10,7 @@ device and decide what funciton to all is abstracted away entirely by this libra
 @author: Suyash Kumar <suyashkumar2003@gmail.com>
 */
 
-#include "HomeAuto.h"
+#include "Conduit.h"
 
 typedef struct node {
   handler f;
@@ -20,11 +20,19 @@ typedef struct node {
 
 node_t* root;
 node_t* current;
+char prefixed_name[35];
 
-HomeAuto::HomeAuto(const char* name, const char* server){
+Conduit::Conduit(const char* name, const char* server, const char* prefix){
   // Set name and server
   this->_name = name;
-  this->_mqtt_server = server;
+  this->_mqtt_server = server; 
+  this->_prefix = prefix;
+
+  // Compute _prefixed_name
+  strcpy(prefixed_name, prefix);
+  strcat(prefixed_name, name);
+  const char* full_prefixed_name = prefixed_name;
+  this->_prefixed_name = full_prefixed_name; 
 
   // Init linked list
   root = (node_t *)malloc(sizeof(node_t));
@@ -33,7 +41,7 @@ HomeAuto::HomeAuto(const char* name, const char* server){
   current = root;
 }
 
-void HomeAuto::addHandler(const char* name, handler f){
+void Conduit::addHandler(const char* name, handler f){
   node *newNode = (node_t*) malloc(sizeof(node_t));
   newNode->f = f;
   newNode->next=0;
@@ -42,7 +50,7 @@ void HomeAuto::addHandler(const char* name, handler f){
   current=newNode;
 }
 
-void HomeAuto::callHandler(const char* name){
+void Conduit::callHandler(const char* name){
   node_t* currentInSearch = root;
   while(true){
     if (strcmp(name, currentInSearch->name)==0){
@@ -56,7 +64,7 @@ void HomeAuto::callHandler(const char* name){
   }
 }
 
-HomeAuto& HomeAuto::setClient(PubSubClient& client){
+Conduit& Conduit::setClient(PubSubClient& client){
   this->_client = &client;
   client.setServer(this->_mqtt_server, 1883);
   client.setCallback([&](char* topic, byte* payload, unsigned int length){
@@ -75,40 +83,50 @@ HomeAuto& HomeAuto::setClient(PubSubClient& client){
   return *this;
 }
 
-void HomeAuto::handle(){
+void Conduit::handle(){
   if (!this->_client->connected()){
     this->reconnect();
   }
   this->_client->loop();
 }
 
-void HomeAuto::reconnect() {
+void Conduit::reconnect() {
   // Loop until we're reconnected
   while (!this->_client->connected()) {
     Serial.print("Attempting MQTT connection...");
     // Attempt to connect
-    if (this->_client->connect(this->_name)) {
+	Serial.println(this->_prefixed_name);
+    if (this->_client->connect(this->_prefixed_name)) {
       Serial.println("connected");
       // Once connected, publish an announcement...
       this->_client->publish("outTopic", "hello world");
       // Suscribe to topics:
-      this->_client->subscribe(this->_name); // suscribe to events meant for this device
+      this->_client->subscribe(this->_prefixed_name); // suscribe to events meant for this device
     } else {
       Serial.print("failed, rc=");
       Serial.print(this->_client->state());
-      Serial.println(" try again in 5 seconds");
+      Serial.println(" try again in 5 seconds"); 
       // Wait 5 seconds before retrying
       delay(5000);
     }
   }
 }
 
-void HomeAuto::publishMessage(const char* message){
+void Conduit::publishMessage(const char* message){
   char str[20];
-  strcpy(str, this->_name);
+  strcpy(str, this->_prefixed_name);
   strcat(str, "/device");
   const char* topicName = str;
   this->_client->publish(topicName, message);
+}
+
+void Conduit::publishData(const char* message, const char* dataStream) { 
+	char topicBuffer[40];
+	strcpy(topicBuffer, this->_prefixed_name);
+	strcat(topicBuffer, "/stream/");
+	strcat(topicBuffer, dataStream);
+	const char* topicName = topicBuffer;
+	this->_client->publish(topicName, message);
 }
 
 void removeSpace(char* s) {

@@ -3,7 +3,7 @@
 #include <WiFiClient.h>
 #include <wifi_info.h> // comment this out and fill in the below two lines
 #include <PubSubClient.h>
-#include <HomeAuto.h>
+#include <Conduit.h>
 #include <Servo.h>
 
 Servo servo1;
@@ -17,9 +17,8 @@ Servo servo1;
 //const char* password = "";
 
 WiFiClient client;
-PubSubClient pClient(client);
-//HomeAuto homeAuto("suyash", "10.0.0.98"); // or "suyash", "home.suyash.io"
-HomeAuto homeAuto("suyash", "home.suyash.io"); // or "suyash", "home.suyash.io"
+PubSubClient pClient(client); 
+Conduit conduit("suyash", "conduit.suyash.io", "my-api-secret"); // or "suyash", "home.suyash.io"
 int ledStatus = 0; 
 int lightsStatus = 0;
 int lightsOnAngle = 65;
@@ -47,11 +46,11 @@ int ledToggle(){
   digitalWrite(LED, (ledStatus) ? LOW : HIGH);
   ledStatus = (ledStatus) ? 0 : 1;
   Serial.println("Toggled");
-  homeAuto.publishMessage((ledStatus) ? "LED ON" : "LED OFF");
+  conduit.publishMessage((ledStatus) ? "LED ON" : "LED OFF");
 }
 
 int publishMessage(){
-    homeAuto.publishMessage("hey there");
+    conduit.publishMessage("hey there");
 }
 /*
 int addTen(){
@@ -60,7 +59,7 @@ int addTen(){
 	char angleStr[20];
 	sprintf(angleStr, "%d", currentAngle);
 	const char* angleStrPublish = angleStr;
-	homeAuto.publishMessage(angleStrPublish);
+	conduit.publishMessage(angleStrPublish);
 }
 int subtractTen(){
 	currentAngle = currentAngle - 10;
@@ -68,14 +67,14 @@ int subtractTen(){
 	char angleStr[20];
 	sprintf(angleStr, "%d", currentAngle);
 	const char* angleStrPublish = angleStr;
-	homeAuto.publishMessage(angleStrPublish); 
+	conduit.publishMessage(angleStrPublish); 
 }
 */
 int lightsOn(){
 	digitalWrite(servo_power, HIGH);
 	servo1.write(lightsOnAngle);
 	delay(700);
-	homeAuto.publishMessage("ON");
+	conduit.publishMessage("ON");
 	digitalWrite(servo_power, LOW);
 	lightsStatus = 1;
 }
@@ -84,13 +83,13 @@ int lightsOff(){
 	digitalWrite(servo_power, HIGH);
 	servo1.write(lightsOffAngle);
 	delay(700);
-	homeAuto.publishMessage("OFF");
+	conduit.publishMessage("OFF");
 	digitalWrite(servo_power, LOW);
 	lightsStatus = 0;
 }
 
 int lightsStatusFunc(){
-	homeAuto.publishMessage((lightsStatus) ? "ON" : "OFF"); 
+	conduit.publishMessage((lightsStatus) ? "ON" : "OFF"); 
 }
 
 void setup(void){
@@ -107,16 +106,16 @@ void setup(void){
   delay(500);
   digitalWrite(servo_power, LOW); 
 
-  // HomeAuto bindings
-  homeAuto.addHandler("ledToggle", &ledToggle);
-  homeAuto.addHandler("hello", &publishMessage); 
-  homeAuto.addHandler("lightsOn", &lightsOn);
-  homeAuto.addHandler("lightsOff", &lightsOff);
-  homeAuto.addHandler("lightsStatus", &lightsStatusFunc);
-  homeAuto.setClient(pClient);
+  // Conduit bindings
+  conduit.addHandler("ledToggle", &ledToggle);
+  conduit.addHandler("hello", &publishMessage); 
+  conduit.addHandler("lightsOn", &lightsOn);
+  conduit.addHandler("lightsOff", &lightsOff);
+  conduit.addHandler("lightsStatus", &lightsStatusFunc);
+  conduit.setClient(pClient);
 
 }
 
 void loop(void){
-  homeAuto.handle(); 
+  conduit.handle(); 
 }

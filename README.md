@@ -6,7 +6,7 @@ This project uses an ESP8266 WiFi microcontroller along with my [conduit](https:
 The whole stack for this project--including firmware, hardware, server (see my [conduit](https://github.com/suyashkumar/conduit) repo), client web appliction, and physical 3D printed components were designed and built from the ground up. 
 
 
-![](img/lightswitch.gif)
+<img src="img/lightswitch.gif" height="300px"/> <img src="img/light-switch-cover.png" height="300px" />
 
 
 ## Structure

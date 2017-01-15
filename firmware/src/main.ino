@@ -1,91 +1,62 @@
-#include <Arduino.h>
-#include <ESP8266WiFi.h>
-#include <WiFiClient.h>
-#include <wifi_info.h> // comment this out and fill in the below two lines
-#include <PubSubClient.h>
+#include <Arduino.h> 
+// #include <wifi_info.h> // comment this out and fill in the below two lines 
 #include <Conduit.h>
 #include <Servo.h>
-
-Servo servo1;
 
 #define LED 4
 #define servo D6
 #define servo_power D5
+#define OFF_STATUS 0
+#define ON_STATUS 1
+#define LIGHTS_ON_ANGLE 65
+#define LIGHTS_OFF_ANGLE 25
 
 // Fill out the below Github peeps:
-//const char* ssid = "mywifi";
-//const char* password = "";
+const char* ssid = "mywifi";
+const char* password = "";
+const char* deviceName = "suyash";
+const char* apiKey = "your-api-key-here";
+const char* serverUrl = "conduit.suyash.io"; 
 
-WiFiClient client;
-PubSubClient pClient(client); 
-Conduit conduit("suyash", "conduit.suyash.io", "my-api-secret"); // or "suyash", "home.suyash.io"
-int ledStatus = 0; 
-int lightsStatus = 0;
-int lightsOnAngle = 65;
-int lightsOffAngle = 25;
+Conduit conduit(deviceName, serverUrl, apiKey); // init Conduit 
 
-void startWIFI(){
-  WiFi.begin(ssid, password);
-  Serial.println("");
+// Global state
+int ledStatus = OFF_STATUS; 
+int lightsStatus = OFF_STATUS; 
 
-  // Wait for connection
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
+Servo servo1; 
 
-  Serial.println("");
-  Serial.print("Connected to ");
-  Serial.println(ssid);
-  Serial.print("IP address: ");
-  Serial.println(WiFi.localIP());
-
-}
-
+// Toggle attached signal LED
 int ledToggle(){
   digitalWrite(LED, (ledStatus) ? LOW : HIGH);
-  ledStatus = (ledStatus) ? 0 : 1;
+  ledStatus = (ledStatus) ? OFF_STATUS : ON_STATUS;
   Serial.println("Toggled");
   conduit.publishMessage((ledStatus) ? "LED ON" : "LED OFF");
 }
 
+// Get a sanity check message (to check conduit communication)
 int publishMessage(){
-    conduit.publishMessage("hey there");
-}
-/*
-int addTen(){
-	currentAngle = currentAngle + 10;
-	servo1.write(currentAngle);
-	char angleStr[20];
-	sprintf(angleStr, "%d", currentAngle);
-	const char* angleStrPublish = angleStr;
-	conduit.publishMessage(angleStrPublish);
-}
-int subtractTen(){
-	currentAngle = currentAngle - 10;
-	servo1.write(currentAngle);
-	char angleStr[20];
-	sprintf(angleStr, "%d", currentAngle);
-	const char* angleStrPublish = angleStr;
-	conduit.publishMessage(angleStrPublish); 
-}
-*/
-int lightsOn(){
-	digitalWrite(servo_power, HIGH);
-	servo1.write(lightsOnAngle);
-	delay(700);
-	conduit.publishMessage("ON");
-	digitalWrite(servo_power, LOW);
-	lightsStatus = 1;
+    conduit.publishMessage("hey there, things are working");
 }
 
+// Turn lights on
+int lightsOn(){
+	digitalWrite(servo_power, HIGH);
+	servo1.write(LIGHTS_ON_ANGLE);
+	delay(500);
+	conduit.publishMessage("ON");
+	digitalWrite(servo_power, LOW);
+	lightsStatus = ON_STATUS;
+}
+
+// Turn lights off
 int lightsOff(){
 	digitalWrite(servo_power, HIGH);
-	servo1.write(lightsOffAngle);
-	delay(700);
+	servo1.write(LIGHTS_OFF_ANGLE);
+	delay(500); 
 	conduit.publishMessage("OFF");
 	digitalWrite(servo_power, LOW);
-	lightsStatus = 0;
+	lightsStatus = OFF_STATUS;
 }
 
 int lightsStatusFunc(){
@@ -98,21 +69,23 @@ void setup(void){
   pinMode(servo, OUTPUT); // Set up servo output
   pinMode(servo_power, OUTPUT); 
   
-  startWIFI(); // Config/start wifi
-  
+  // Servo initialization
   digitalWrite(servo_power, HIGH); 
   servo1.attach(servo); 
-  servo1.write(lightsOnAngle);
+  servo1.write(LIGHTS_ON_ANGLE);
   delay(500);
   digitalWrite(servo_power, LOW); 
+
+  // Conduit initialization  
+  conduit.startWIFI(ssid, password); // Config/start wifi
+  conduit.init();
 
   // Conduit bindings
   conduit.addHandler("ledToggle", &ledToggle);
   conduit.addHandler("hello", &publishMessage); 
   conduit.addHandler("lightsOn", &lightsOn);
   conduit.addHandler("lightsOff", &lightsOff);
-  conduit.addHandler("lightsStatus", &lightsStatusFunc);
-  conduit.setClient(pClient);
+  conduit.addHandler("lightsStatus", &lightsStatusFunc); 
 
 }
 

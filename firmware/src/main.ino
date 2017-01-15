@@ -14,7 +14,7 @@
 // Fill out the below Github peeps:
 const char* ssid = "mywifi";
 const char* password = "";
-const char* deviceName = "suyash_1";
+const char* deviceName = "suyash";
 const char* apiKey = "your-api-key-here";
 const char* serverUrl = "conduit.suyash.io"; 
 

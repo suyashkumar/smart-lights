@@ -28,11 +28,9 @@ class InterfaceController: WKInterfaceController {
     }
     
     @IBAction func refresh() {
-        Alamofire.request("https://conduit.suyash.io/api/send/suyash/lightsStatus",headers: headers).responseJSON { response in
-            print(response.result)   // result of response serialization
-            
+        Alamofire.request("https://conduit.suyash.io/api/send/suyash/lightsStatus", headers: headers).responseJSON { response in
+
             if let JSON = response.result.value {
-                print("JSON: \(JSON)")
                 let response = JSON as! NSDictionary
                 self.updateStatus(status: response["data"] as? String)
             }
@@ -42,11 +40,8 @@ class InterfaceController: WKInterfaceController {
     }
 
     @IBAction func toggle() {
-        Alamofire.request("https://conduit.suyash.io/api/send/suyash/lightsToggle",headers: headers).responseJSON { response in
-            print(response.result)   // result of response serialization
-            
+        Alamofire.request("https://conduit.suyash.io/api/send/suyash/lightsToggle", headers: headers).responseJSON { response in
             if let JSON = response.result.value {
-                print("JSON: \(JSON)")
                 let response = JSON as! NSDictionary
                 self.updateStatus(status: response["data"] as? String)
             }

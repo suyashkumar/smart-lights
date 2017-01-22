@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="11762" systemVersion="16A323" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="AgC-eL-Hgc">
+    <device id="watch42" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="11508"/>
+    </dependencies>
+    <scenes>
+        <!--Interface Controller-->
+        <scene sceneID="aou-V4-d1y">
+            <objects>
+                <controller id="AgC-eL-Hgc" customClass="InterfaceController" customModule="smart_lights_watch_WatchKit_App" customModuleProvider="target">
+                    <items>
+                        <separator alignment="left" id="6gC-LC-6sK"/>
+                        <label width="1" height="0.29999999999999999" alignment="left" text="Light Status testing" textAlignment="center" numberOfLines="2" id="7cN-Fd-ZUP"/>
+                        <separator alignment="left" id="YC6-BL-GWm"/>
+                        <button width="1" height="0.45000000000000001" alignment="left" verticalAlignment="bottom" title="Toggle" id="8PQ-fO-m2b">
+                            <connections>
+                                <action selector="toggle" destination="AgC-eL-Hgc" id="6SN-18-8Df"/>
+                            </connections>
+                        </button>
+                        <button width="1" height="0.22" alignment="left" verticalAlignment="bottom" title="Refresh" id="PXn-dn-8to">
+                            <color key="backgroundColor" red="0.00018075491861884428" green="0.76300475268905077" blue="0.94019670050761417" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <connections>
+                                <action selector="refresh" destination="AgC-eL-Hgc" id="kei-54-orx"/>
+                            </connections>
+                        </button>
+                    </items>
+                    <connections>
+                        <outlet property="lightStatus" destination="7cN-Fd-ZUP" id="wKA-Co-ErR"/>
+                        <outlet property="refreshButton" destination="PXn-dn-8to" id="kS4-br-kyu"/>
+                        <outlet property="toggleButton" destination="8PQ-fO-m2b" id="NPA-lA-AgB"/>
+                    </connections>
+                </controller>
+            </objects>
+            <point key="canvasLocation" x="220" y="345"/>
+        </scene>
+        <!--Static Notification Interface Controller-->
+        <scene sceneID="AEw-b0-oYE">
+            <objects>
+                <notificationController id="YCC-NB-fut">
+                    <items>
+                        <label alignment="left" text="Alert Label" id="IdU-wH-bcW"/>
+                    </items>
+                    <notificationCategory key="notificationCategory" identifier="myCategory" id="JfB-70-Muf"/>
+                    <connections>
+                        <outlet property="notificationAlertLabel" destination="IdU-wH-bcW" id="JKC-fr-R95"/>
+                        <segue destination="4sK-HA-Art" kind="relationship" relationship="dynamicNotificationInterface" id="kXh-Jw-8B1"/>
+                    </connections>
+                </notificationController>
+            </objects>
+            <point key="canvasLocation" x="220" y="643"/>
+        </scene>
+        <!--Notification Controller-->
+        <scene sceneID="ZPc-GJ-vnh">
+            <objects>
+                <controller id="4sK-HA-Art" customClass="NotificationController" customModule="smart_lights_watch_WatchKit_App" customModuleProvider="target"/>
+            </objects>
+            <point key="canvasLocation" x="468" y="643"/>
+        </scene>
+    </scenes>
+</document>

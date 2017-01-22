@@ -1,5 +1,5 @@
 #include <Arduino.h> 
-// #include <wifi_info.h> // comment this out and fill in the below two lines 
+// #include <wifi_info.h> 
 #include <Conduit.h>
 #include <Servo.h>
 
@@ -22,7 +22,7 @@ Conduit conduit(deviceName, serverUrl, apiKey); // init Conduit
 
 // Global state
 int ledStatus = OFF_STATUS; 
-int lightsStatus = OFF_STATUS; 
+int lightsStatus = ON_STATUS; 
 
 Servo servo1; 
 
@@ -63,6 +63,10 @@ int lightsStatusFunc(){
 	conduit.publishMessage((lightsStatus) ? "ON" : "OFF"); 
 }
 
+int lightsToggle() {
+	(lightsStatus) ? lightsOff() : lightsOn();
+}
+
 void setup(void){
   Serial.begin(115200); // Start serial
   pinMode(LED, OUTPUT); // Set LED pin to output
@@ -86,6 +90,7 @@ void setup(void){
   conduit.addHandler("lightsOn", &lightsOn);
   conduit.addHandler("lightsOff", &lightsOff);
   conduit.addHandler("lightsStatus", &lightsStatusFunc); 
+  conduit.addHandler("lightsToggle", &lightsToggle); 
 
 }
 

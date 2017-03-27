@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import FunctionButton from './components/function-button.js';
+import React, { Component } from 'react'; 
 import Footer from './components/footer.js';
 import './App.css';
 class App extends Component {

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import FunctionButton from './function-button';
-import axios from '../axios-auth';
+import FunctionButton from './function-switch/function-button';
+import axios from '../util/axios-auth';
+import { server } from '../util/constants';
 
-const server = 'http://home.suyash.io'; 
+
 class FunctionSwitch extends Component {
 	constructor(props){ 
 		super(props);

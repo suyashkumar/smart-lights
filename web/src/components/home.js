@@ -1,5 +1,5 @@
 import React from 'react';
-import FunctionSwitch from './components/function-switch';
+import FunctionSwitch from './function-switch';
 
 const Home = props => {
 	return (

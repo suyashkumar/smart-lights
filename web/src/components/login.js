@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import axios from './axios-auth';
-
-//const server = 'http://10.0.0.98:9000' 
-const server = 'http://home.suyash.io'; 
+import axios from '../util/axios-auth';
+import { server } from '../util/constants';
 
 class login extends Component{
 	constructor(props) {
@@ -36,6 +34,12 @@ class login extends Component{
 		this.setState({password: e.target.value}); 
 	} 
 
+	handlePasswordKeyPress = (e) => {
+		if (e.key == 'Enter') {
+			this.handleLogin();
+		}
+	}
+
 	render(){
 		return (
 			<div className="text-center">
@@ -49,6 +53,7 @@ class login extends Component{
 					<input 
 						type="password" 
 						onChange={this.handlePasswordChange} 
+						onKeyPress={this.handlePasswordKeyPress}
 						value={this.state.password}/> 
 				</div>
 				<button 

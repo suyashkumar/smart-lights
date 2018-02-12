@@ -6,13 +6,13 @@ const Home = props => {
 	<div>
 		<FunctionSwitch
 			title="Room Lights"
-			deviceName="suyash"
+			deviceName="suyash_1"
 			functionNameOn="lightsOn"
 			functionNameOff="lightsOff" 
 			statusFunction="lightsStatus"/> 
 		<FunctionSwitch
 			title="LED Light"
-			deviceName="suyash"
+			deviceName="suyash_1"
 			functionNameOn="ledToggle"
 			functionNameOff="ledToggle" />
 	</div>

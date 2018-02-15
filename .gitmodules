@@ -1,0 +1,3 @@
+[submodule "3DModels/scad_modules"]
+	path = 3DModels/scad_modules
+	url = git@github.com:suyashkumar/scad_modules.git

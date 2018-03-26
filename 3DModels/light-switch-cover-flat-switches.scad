@@ -6,13 +6,13 @@ base_length = 120;
 base_depth = 3;
 
 cutout_x = 24;
-cutout_y = 21;
+cutout_y = 20;
 cutout_width = 34;
-cutout_height = 67;
+cutout_height = 71;
 
 screw_x = 40;
-screw_1_y = cutout_y-16;
-screw_2_y = cutout_y + cutout_height + 16;
+screw_1_y = cutout_y-14;
+screw_2_y = cutout_y + cutout_height + 14;
 screw_dia = 5;
 
 module face_plate() {
